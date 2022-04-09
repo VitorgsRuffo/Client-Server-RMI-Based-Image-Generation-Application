@@ -29,7 +29,7 @@ import java.rmi.*;
 public class MandelBrotClient extends Applet implements MouseListener,
 		MouseMotionListener {
 
-	private final MandelServer server;
+	private final MandelServer[] servers;
 
 	private static final long serialVersionUID = 1L;
 
@@ -59,9 +59,9 @@ public class MandelBrotClient extends Applet implements MouseListener,
 
 	private int py;
 
-	
-	public MandelBrotClient(MandelServer server){
-		this.server = server;
+
+	public MandelBrotClient(MandelServer[] servers){
+		this.servers = servers;
 	}
 
 	/**
@@ -92,9 +92,35 @@ public class MandelBrotClient extends Applet implements MouseListener,
 	public void start() {
 
 		//open 4 threads
-		//assign each one of them to send to a server the request for calculating 1/4 of the image (i.e, draw to image's graphics instance and return that Image instance).
+		//assign each one of them to send to a server the request for calculating 1/4 of the image (i.e, draw to a image's graphics instance and return that Image instance).
+		MandelBrotThread thread1 = new MandelBrotThread(1, this.servers[0], this.createImage(TAMANHO_X, TAMANHO_Y), 0, MEIO_X, 0, MEIO_Y, interacoes, posicaoFractal, zoom, MEIO_X, MEIO_Y);
+		MandelBrotThread thread2 = new MandelBrotThread(2, this.servers[1], this.createImage(TAMANHO_X, TAMANHO_Y), MEIO_X, TAMANHO_X, 0, MEIO_Y, interacoes, posicaoFractal, zoom, MEIO_X, MEIO_Y);
+		MandelBrotThread thread3 = new MandelBrotThread(3, this.servers[2], this.createImage(TAMANHO_X, TAMANHO_Y), 0, MEIO_X, MEIO_Y, TAMANHO_Y, interacoes, posicaoFractal, zoom, MEIO_X, MEIO_Y);
+		MandelBrotThread thread4 = new MandelBrotThread(4, this.servers[3], this.createImage(TAMANHO_X, TAMANHO_Y), MEIO_X, TAMANHO_X, MEIO_Y, TAMANHO_Y, interacoes, posicaoFractal, zoom, MEIO_X, MEIO_Y);
+
+		thread1.start();
+		thread2.start();
+		thread3.start();
+		thread4.start();
+		
 		//wait for all the 4 results.
-		//draw the resulting image to the offscreen's graphics instance (i.e, g.drawImage(image, corresponding_x, corresponding_y, ...))
+		while(thread1.isAlive()){}
+		while(thread2.isAlive()){}
+		while(thread3.isAlive()){}
+		while(thread4.isAlive()){}
+
+		//draw the resulting 4 images to the offscreen's graphics instance.
+		Image img1 = thread1.getResultImage();
+		Image img2 = thread1.getResultImage();
+		Image img3 = thread1.getResultImage();
+		Image img4 = thread1.getResultImage();
+
+		Graphics i = offscreen.getGraphics();
+		
+		i.drawImage(img1, 0, 0, MEIO_X, MEIO_Y, 0, 0, MEIO_X, MEIO_Y, this);
+		i.drawImage(img2, MEIO_X, 0, TAMANHO_X, MEIO_Y, MEIO_X, 0, TAMANHO_X, MEIO_Y, this);
+		i.drawImage(img3, 0, MEIO_Y, MEIO_X, TAMANHO_Y, 0, MEIO_Y, MEIO_X, TAMANHO_Y, this);
+		i.drawImage(img4, MEIO_X, MEIO_Y, TAMANHO_X, TAMANHO_Y, MEIO_X, MEIO_Y, TAMANHO_X, TAMANHO_Y, this);
 	}
 
 	
@@ -107,9 +133,35 @@ public class MandelBrotClient extends Applet implements MouseListener,
 		if (recalcular) {
 
 			//open 4 threads
-			//assign each one of them to send to a server the request for calculating 1/4 of the image (i.e, draw to image's graphics instance and return that Image instance).
+			//assign each one of them to send to a server the request for calculating 1/4 of the image (i.e, draw to a image's graphics instance and return that Image instance).
+			MandelBrotThread thread1 = new MandelBrotThread(1, this.servers[0], this.createImage(TAMANHO_X, TAMANHO_Y), 0, MEIO_X, 0, MEIO_Y, interacoes, posicaoFractal, zoom, MEIO_X, MEIO_Y);
+			MandelBrotThread thread2 = new MandelBrotThread(2, this.servers[1], this.createImage(TAMANHO_X, TAMANHO_Y), MEIO_X, TAMANHO_X, 0, MEIO_Y, interacoes, posicaoFractal, zoom, MEIO_X, MEIO_Y);
+			MandelBrotThread thread3 = new MandelBrotThread(3, this.servers[2], this.createImage(TAMANHO_X, TAMANHO_Y), 0, MEIO_X, MEIO_Y, TAMANHO_Y, interacoes, posicaoFractal, zoom, MEIO_X, MEIO_Y);
+			MandelBrotThread thread4 = new MandelBrotThread(4, this.servers[3], this.createImage(TAMANHO_X, TAMANHO_Y), MEIO_X, TAMANHO_X, MEIO_Y, TAMANHO_Y, interacoes, posicaoFractal, zoom, MEIO_X, MEIO_Y);
+
+			thread1.start();
+			thread2.start();
+			thread3.start();
+			thread4.start();
+			
 			//wait for all the 4 results.
-			//draw the resulting image to the offscreen's graphics instance (i.e, i.drawImage(image, corresponding_x, corresponding_y, ...))
+			while(thread1.isAlive()){}
+			while(thread2.isAlive()){}
+			while(thread3.isAlive()){}
+			while(thread4.isAlive()){}
+
+			//draw the resulting 4 images to the offscreen's graphics instance.
+			Image img1 = thread1.getResultImage();
+			Image img2 = thread1.getResultImage();
+			Image img3 = thread1.getResultImage();
+			Image img4 = thread1.getResultImage();
+
+			Graphics i = offscreen.getGraphics();
+			
+			i.drawImage(img1, 0, 0, MEIO_X, MEIO_Y, 0, 0, MEIO_X, MEIO_Y, this);
+			i.drawImage(img2, MEIO_X, 0, TAMANHO_X, MEIO_Y, MEIO_X, 0, TAMANHO_X, MEIO_Y, this);
+			i.drawImage(img3, 0, MEIO_Y, MEIO_X, TAMANHO_Y, 0, MEIO_Y, MEIO_X, TAMANHO_Y, this);
+			i.drawImage(img4, MEIO_X, MEIO_Y, TAMANHO_X, TAMANHO_Y, MEIO_X, MEIO_Y, TAMANHO_X, TAMANHO_Y, this);
 		}
 
 		paint(g);
@@ -227,21 +279,30 @@ public class MandelBrotClient extends Applet implements MouseListener,
 	static public void main (String argv[]) {
 		System.setSecurityManager(new RMISecurityManager());
 
-		if (argv.length!=1) {
-			System.err.println("Usage: MandelBrotClient <server-rmi-url>");
+		if (argv.length!=4) {
+			System.err.println("Usage: MandelBrotClient <server1-rmi-url> <server2-rmi-url> <server3-rmi-url> <server4-rmi-url>");
 			System.exit(-1);
 		}
 
-		String fullname = argv[0];
-		MandelServer server = null;    
+		String fullname1 = argv[0];
+		String fullname2 = argv[1];
+		String fullname3 = argv[2];
+		String fullname4 = argv[3];
+
+		MandelServer[] servers = {null, null, null, null};    
+		
 		try {
-			server = (MandelServer) Naming.lookup(fullname);
+			servers[0] = (MandelServer) Naming.lookup(fullname1);
+			servers[1] = (MandelServer) Naming.lookup(fullname2);
+			servers[2] = (MandelServer) Naming.lookup(fullname3);
+			servers[3] = (MandelServer) Naming.lookup(fullname4);
+
 		} catch (Exception e) {
-			System.out.println("Caught an exception doing name lookup on "+fullname+": "+e);
+			System.out.println("Caught an exception doing name lookup: "+e);
 			System.exit(-1);
 		}
 
-	    final Applet applet = new MandelBrotClient(server);
+	    final Applet applet = new MandelBrotClient(servers);
 	    Frame frame = new Frame (
 	                 "MyApplet");
 	    frame.addWindowListener (

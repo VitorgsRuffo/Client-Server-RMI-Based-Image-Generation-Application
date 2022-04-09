@@ -10,17 +10,17 @@ public class MandelServerImpl extends UnicastRemoteObject implements MandelServe
   
   MandelServerImpl() throws RemoteException { };
 
-  public Image calculateMandelBrotFractalImage(Image plainImage, int width, int height, int interacoes, Vetor2D posicaoFractal, double zoom, int MEIO_X, int MEIO_Y) throws RemoteException {
+  public Image calculateMandelBrotFractalImage(Image plainImage, int x_start, int x_end, int y_start, int y_end, int interacoes, Vetor2D posicaoFractal, double zoom, int MEIO_X, int MEIO_Y) throws RemoteException {
 
-    Graphics i = plainImage.getGraphics(); //doubt about image size: whole image or 1/4 image??
+    Graphics i = plainImage.getGraphics();
 
-
-		for (int x = 0; x < width; x++) {
-			for (int y = 0; y < height; y++) {
-				i.setColor(pintaPonto(x, y, interacoes, posicaoFractal, zoom, MEIO_X, MEIO_Y));
-				i.drawLine(x, y, x + 1, y);
-			}
+	for (int x = x_start; x < x_end ; x++) {
+		for (int y = y_start; y < y_end; y++) {
+			i.setColor(pintaPonto(x, y, interacoes, posicaoFractal, zoom, MEIO_X, MEIO_Y));
+			i.drawLine(x, y, x + 1, y);
 		}
+	}
+
     return plainImage;
   }
 
