@@ -17,4 +17,4 @@ Dentro da pasta src:
 	java -Djava.rmi.server.codebase=http://www.cs.nott.ac.uk/~ -Djava.security.policy=java.policy MandelServerImpl rmi://:7000/wp
 	java -Djava.rmi.server.codebase=http://www.cs.nott.ac.uk/~ -Djava.security.policy=java.policy MandelServerImpl rmi://:8000/wp
 8 - Executando o cliente: 
-	java -Djava.security.policy=java.policy MandelBrotClient rmi://wp:5000/wp rmi://wp:6000/wp rmi://wp:7000/wp rmi://wp:8000/wp
+	java -Djava.security.policy=java.policy MandelBrotClient rmi://:5000/wp rmi://:6000/wp rmi://:7000/wp rmi://:8000/wp
