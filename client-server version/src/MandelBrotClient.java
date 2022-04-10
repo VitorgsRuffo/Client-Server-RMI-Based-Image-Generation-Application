@@ -13,6 +13,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.rmi.*;
+import java.awt.image.BufferedImage;
 
 
 
@@ -68,8 +69,7 @@ public class MandelBrotClient extends Applet implements MouseListener,
 	 * Inicializa recursos utilizados pelo Applet
 	 */
 	public void init() {
-		offscreen = this.createImage(TAMANHO_X, TAMANHO_Y);
-
+        offscreen = new BufferedImage(TAMANHO_X, TAMANHO_Y, BufferedImage.TYPE_INT_RGB);
 		posicaoFractal = new Vetor2D(-0.8, 0);
 		posicaoJanela = new Vetor2D(TAMANHO_X / 2, TAMANHO_Y / 2);
 
@@ -83,7 +83,6 @@ public class MandelBrotClient extends Applet implements MouseListener,
 
 		this.addMouseListener(this);
 		this.addMouseMotionListener(this);
-
 	}
 
 	/**
@@ -93,10 +92,10 @@ public class MandelBrotClient extends Applet implements MouseListener,
 
 		//open 4 threads
 		//assign each one of them to send to a server the request for calculating 1/4 of the image (i.e, draw to a image's graphics instance and return that Image instance).
-		MandelBrotThread thread1 = new MandelBrotThread(1, this.servers[0], this.createImage(TAMANHO_X, TAMANHO_Y), 0, MEIO_X, 0, MEIO_Y, interacoes, posicaoFractal, zoom, MEIO_X, MEIO_Y);
-		MandelBrotThread thread2 = new MandelBrotThread(2, this.servers[1], this.createImage(TAMANHO_X, TAMANHO_Y), MEIO_X, TAMANHO_X, 0, MEIO_Y, interacoes, posicaoFractal, zoom, MEIO_X, MEIO_Y);
-		MandelBrotThread thread3 = new MandelBrotThread(3, this.servers[2], this.createImage(TAMANHO_X, TAMANHO_Y), 0, MEIO_X, MEIO_Y, TAMANHO_Y, interacoes, posicaoFractal, zoom, MEIO_X, MEIO_Y);
-		MandelBrotThread thread4 = new MandelBrotThread(4, this.servers[3], this.createImage(TAMANHO_X, TAMANHO_Y), MEIO_X, TAMANHO_X, MEIO_Y, TAMANHO_Y, interacoes, posicaoFractal, zoom, MEIO_X, MEIO_Y);
+		MandelBrotThread thread1 = new MandelBrotThread(1, this.servers[0], 0, MEIO_X, 0, MEIO_Y, interacoes, posicaoFractal, zoom, MEIO_X, MEIO_Y);
+		MandelBrotThread thread2 = new MandelBrotThread(2, this.servers[1], MEIO_X, TAMANHO_X, 0, MEIO_Y, interacoes, posicaoFractal, zoom, MEIO_X, MEIO_Y);
+		MandelBrotThread thread3 = new MandelBrotThread(3, this.servers[2], 0, MEIO_X, MEIO_Y, TAMANHO_Y, interacoes, posicaoFractal, zoom, MEIO_X, MEIO_Y);
+		MandelBrotThread thread4 = new MandelBrotThread(4, this.servers[3], MEIO_X, TAMANHO_X, MEIO_Y, TAMANHO_Y, interacoes, posicaoFractal, zoom, MEIO_X, MEIO_Y);
 
 		thread1.start();
 		thread2.start();
@@ -111,9 +110,9 @@ public class MandelBrotClient extends Applet implements MouseListener,
 
 		//draw the resulting 4 images to the offscreen's graphics instance.
 		Image img1 = thread1.getResultImage();
-		Image img2 = thread1.getResultImage();
-		Image img3 = thread1.getResultImage();
-		Image img4 = thread1.getResultImage();
+		Image img2 = thread2.getResultImage();
+		Image img3 = thread3.getResultImage();
+		Image img4 = thread4.getResultImage();
 
 		Graphics i = offscreen.getGraphics();
 		
@@ -134,10 +133,10 @@ public class MandelBrotClient extends Applet implements MouseListener,
 
 			//open 4 threads
 			//assign each one of them to send to a server the request for calculating 1/4 of the image (i.e, draw to a image's graphics instance and return that Image instance).
-			MandelBrotThread thread1 = new MandelBrotThread(1, this.servers[0], this.createImage(TAMANHO_X, TAMANHO_Y), 0, MEIO_X, 0, MEIO_Y, interacoes, posicaoFractal, zoom, MEIO_X, MEIO_Y);
-			MandelBrotThread thread2 = new MandelBrotThread(2, this.servers[1], this.createImage(TAMANHO_X, TAMANHO_Y), MEIO_X, TAMANHO_X, 0, MEIO_Y, interacoes, posicaoFractal, zoom, MEIO_X, MEIO_Y);
-			MandelBrotThread thread3 = new MandelBrotThread(3, this.servers[2], this.createImage(TAMANHO_X, TAMANHO_Y), 0, MEIO_X, MEIO_Y, TAMANHO_Y, interacoes, posicaoFractal, zoom, MEIO_X, MEIO_Y);
-			MandelBrotThread thread4 = new MandelBrotThread(4, this.servers[3], this.createImage(TAMANHO_X, TAMANHO_Y), MEIO_X, TAMANHO_X, MEIO_Y, TAMANHO_Y, interacoes, posicaoFractal, zoom, MEIO_X, MEIO_Y);
+			MandelBrotThread thread1 = new MandelBrotThread(1, this.servers[0], 0, MEIO_X, 0, MEIO_Y, interacoes, posicaoFractal, zoom, MEIO_X, MEIO_Y);
+			MandelBrotThread thread2 = new MandelBrotThread(2, this.servers[1], MEIO_X, TAMANHO_X, 0, MEIO_Y, interacoes, posicaoFractal, zoom, MEIO_X, MEIO_Y);
+			MandelBrotThread thread3 = new MandelBrotThread(3, this.servers[2], 0, MEIO_X, MEIO_Y, TAMANHO_Y, interacoes, posicaoFractal, zoom, MEIO_X, MEIO_Y);
+			MandelBrotThread thread4 = new MandelBrotThread(4, this.servers[3], MEIO_X, TAMANHO_X, MEIO_Y, TAMANHO_Y, interacoes, posicaoFractal, zoom, MEIO_X, MEIO_Y);
 
 			thread1.start();
 			thread2.start();
@@ -152,9 +151,9 @@ public class MandelBrotClient extends Applet implements MouseListener,
 
 			//draw the resulting 4 images to the offscreen's graphics instance.
 			Image img1 = thread1.getResultImage();
-			Image img2 = thread1.getResultImage();
-			Image img3 = thread1.getResultImage();
-			Image img4 = thread1.getResultImage();
+			Image img2 = thread2.getResultImage();
+			Image img3 = thread3.getResultImage();
+			Image img4 = thread4.getResultImage();
 
 			Graphics i = offscreen.getGraphics();
 			
@@ -182,7 +181,6 @@ public class MandelBrotClient extends Applet implements MouseListener,
 					(int) (2.0f * (MEIO_X / fatorZoom)),
 					(int) (2.0f * (MEIO_Y / fatorZoom)));
 		}
-
 	}
 
 	/**
@@ -230,10 +228,9 @@ public class MandelBrotClient extends Applet implements MouseListener,
 		recalcular = false;
 		this.repaint();
 	}
-
-	/**
-	 * Metodo nao utilizado
-	 */
+	/** 
+	Metodo nao utilizado
+	*/
 	public void mousePressed(MouseEvent e) {
 
 	}
@@ -323,5 +320,4 @@ public class MandelBrotClient extends Applet implements MouseListener,
 	    applet.init();
 	    applet.start();
 	  }
-
 }

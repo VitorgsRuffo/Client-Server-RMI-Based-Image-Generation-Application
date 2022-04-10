@@ -1,4 +1,6 @@
-public class Vetor2D {
+import java.io.Serializable;
+
+public class Vetor2D implements Serializable {
 	public double x;
 	public double y;
 

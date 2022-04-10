@@ -4,15 +4,17 @@ import java.rmi.server.UnicastRemoteObject;
 import java.awt.Image;
 import java.awt.Graphics;
 import java.awt.Color;
-
+import javax.swing.ImageIcon;
+import java.awt.image.BufferedImage;
 
 public class MandelServerImpl extends UnicastRemoteObject implements MandelServer {
   
   MandelServerImpl() throws RemoteException { };
 
-  public Image calculateMandelBrotFractalImage(Image plainImage, int x_start, int x_end, int y_start, int y_end, int interacoes, Vetor2D posicaoFractal, double zoom, int MEIO_X, int MEIO_Y) throws RemoteException {
+  public ImageIcon calculateMandelBrotFractalImage(int x_start, int x_end, int y_start, int y_end, int interacoes, Vetor2D posicaoFractal, double zoom, int MEIO_X, int MEIO_Y) throws RemoteException {
 
-    Graphics i = plainImage.getGraphics();
+	Image plainImg = new BufferedImage(MEIO_X*2, MEIO_Y*2, BufferedImage.TYPE_INT_RGB);
+	Graphics i = plainImg.getGraphics();
 
 	for (int x = x_start; x < x_end ; x++) {
 		for (int y = y_start; y < y_end; y++) {
@@ -21,7 +23,7 @@ public class MandelServerImpl extends UnicastRemoteObject implements MandelServe
 		}
 	}
 
-    return plainImage;
+    return new ImageIcon(plainImg);
   }
 
   /**
